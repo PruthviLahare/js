@@ -1,0 +1,1 @@
+--- perform single operations for multiple values

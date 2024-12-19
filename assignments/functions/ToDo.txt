@@ -1,0 +1,26 @@
+02_leap_year.js
+- isDivisibleBy() => remove the function
+
+03_string_replace.js
+- 22 => replaceText
+
+04_string_slice.js
+- 25 => slicedText
+- stringSlice is a good variable name
+
+06_is_substring.js
+- isSubstring() => 32-34 can be removed
+
+07_fizz_buzz.js
+- put 3 and 5 in constants as they are magic numbers 
+
+08_first_prime_above.js
+- 25 - 35 => should be above the firstPrimeAbove()
+- isPrime() => 26 - 28 not needed
+
+11_substring_count.js
+- nextChar => nextCharacter
+
+09_nth_fibonacci.js
+- iterator => noOfTerms
+- nextToNextTerm
