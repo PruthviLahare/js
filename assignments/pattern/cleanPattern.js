@@ -77,19 +77,43 @@ const alternate = function (rowCounts, times, upto) {
 
 const alternatingRectangle = function (dimensions) {
   const [columns, rows] = dimensions;
-  const rowCounts = range(0, rows, 1);
 
+  const rowCounts = range(0, rows, 1);
   const rectangle = alternate(rowCounts, columns, 2);
+
   return rectangle;
 };
 
 const triangle = function (dimension) {
-  const till = dimension[0] + 1;
+  const size = dimension[0] + 1;
 
-  const rowCounts = range(1, till, 1);
-
+  const rowCounts = range(1, size, 1);
   const triangle = rowCounts.map(getRow('*'));
+
   return triangle;
+};
+
+const space = function (times) {
+  return SPACE.repeat(times);
+};
+
+const spaceBefore = function (triangleShape, dimension) {
+  const space1 = range(dimension[0] - 1, -1, -1);
+  const tri = [];
+
+  for (let index = 0; index < triangleShape.length; index++) {
+    const row = space(space1[index]) + triangleShape[index];
+    tri.push(row);
+  }
+
+  return tri;
+};
+
+const rightAngledtriangle = function (dimension) {
+  const triangleShape = triangle(dimension);
+  const tri = spaceBefore(triangleShape, dimension);
+
+  return tri;
 };
 
 function isRowOrColumnEmpty(dimensions) {
@@ -108,7 +132,8 @@ const patterns = {
   'filled-rectangle': filledRectangle,
   'hollow-rectangle': hollowRectangle,
   'alternating-rectangle': alternatingRectangle,
-  'triangle': triangle
+  'triangle': triangle,
+  'right-aligned-triangle': rightAngledtriangle,
 };
 
 function testGeneratePattern(style1, dimensions, expected, failed) {
@@ -169,6 +194,17 @@ function testTriangle(failed) {
   triangleStyle([1], '*', failed);
 }
 
+function rightAngledtriangleStyle(dimensions, expected, failed) {
+  testGeneratePattern('right-aligned-triangle', dimensions, expected, failed);
+}
+
+function testRightAngledtriangle(failed) {
+  rightAngledtriangleStyle([3], '  *\n **\n***', failed);
+  rightAngledtriangleStyle([5], '    *\n   **\n  ***\n ****\n*****', failed);
+  rightAngledtriangleStyle([0], '', failed);
+  rightAngledtriangleStyle([1], '*', failed);
+}
+
 function testAll() {
   const failed = [];
 
@@ -176,6 +212,7 @@ function testAll() {
   testHollowRectangle(failed);
   testAlternatingRectangle(failed);
   testTriangle(failed);
+  testRightAngledtriangle(failed);
 
   console.table(failed);
 }
