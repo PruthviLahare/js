@@ -194,32 +194,32 @@ function testGeneratePattern(style1, dimensions, expected, failed, style2) {
   }
 }
 
-function testingFilledRectangle(dimensions, expected, failed) {
+function filledRectangleStyle(dimensions, expected, failed) {
   testGeneratePattern('filled-rectangle', dimensions, expected, failed);
 }
 
 function testFilledRectangle(failed) {
-  testingFilledRectangle([0, 0], '', failed);
-  testingFilledRectangle([7, 0], '', failed);
-  testingFilledRectangle([0, 5], '', failed);
-  testingFilledRectangle([5, 3], '*****\n*****\n*****', failed);
-  testingFilledRectangle([2, 4], '**\n**\n**\n**', failed);
-  testingFilledRectangle([5, 1], '*****', failed);
+  filledRectangleStyle([0, 0], '', failed);
+  filledRectangleStyle([7, 0], '', failed);
+  filledRectangleStyle([0, 5], '', failed);
+  filledRectangleStyle([5, 3], '*****\n*****\n*****', failed);
+  filledRectangleStyle([2, 4], '**\n**\n**\n**', failed);
+  filledRectangleStyle([5, 1], '*****', failed);
 }
 
-function testingHollowRectangle(dimensions, expected, failed) {
+function hollowRectangleStyle(dimensions, expected, failed) {
   testGeneratePattern('hollow-rectangle', dimensions, expected, failed);
 }
 
 function testHollowRectangle(failed) {
-  testingHollowRectangle([5, 1], '*****', failed);
-  testingHollowRectangle([1, 2], '*\n*', failed);
-  testingHollowRectangle([2, 2], '**\n**', failed);
-  testingHollowRectangle([6, 2], '******\n******', failed);
-  testingHollowRectangle([4, 3], '****\n*  *\n****', failed);
-  testingHollowRectangle([5, 4], '*****\n*   *\n*   *\n*****', failed);
-  testingHollowRectangle([5, 0], '', failed);
-  testingHollowRectangle([0, 0], '', failed);
+  hollowRectangleStyle([5, 1], '*****', failed);
+  hollowRectangleStyle([1, 2], '*\n*', failed);
+  hollowRectangleStyle([2, 2], '**\n**', failed);
+  hollowRectangleStyle([6, 2], '******\n******', failed);
+  hollowRectangleStyle([4, 3], '****\n*  *\n****', failed);
+  hollowRectangleStyle([5, 4], '*****\n*   *\n*   *\n*****', failed);
+  hollowRectangleStyle([5, 0], '', failed);
+  hollowRectangleStyle([0, 0], '', failed);
 }
 
 function testingAlternatingRectangle(dimensions, expected, failed) {
