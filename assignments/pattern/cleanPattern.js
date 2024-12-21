@@ -105,6 +105,12 @@ const spaceBefore = function (triangleShape, dimension) {
     const row = space(space1[index]) + triangleShape[index];
     tri.push(row);
   }
+  // return function (row) {
+  //   for (const element of space1) {
+  //     return space(element) + row;
+  //   }
+
+  // };
 
   return tri;
 };
@@ -112,8 +118,18 @@ const spaceBefore = function (triangleShape, dimension) {
 const rightAngledtriangle = function (dimension) {
   const triangleShape = triangle(dimension);
   const tri = spaceBefore(triangleShape, dimension);
+  // const tri = triangleShape.map(spaceBefore(dimension));
 
   return tri;
+};
+
+const spacedAlternatingRectangle = function (dimensions) {
+  const [columns, rows] = dimensions;
+
+  const rowCounts = range(0, rows, 1);
+  const rectangle = alternate(rowCounts, columns, 3);
+
+  return rectangle;
 };
 
 function isRowOrColumnEmpty(dimensions) {
@@ -134,6 +150,7 @@ const patterns = {
   'alternating-rectangle': alternatingRectangle,
   'triangle': triangle,
   'right-aligned-triangle': rightAngledtriangle,
+  'spaced-alternating-rectangle': spacedAlternatingRectangle,
 };
 
 function testGeneratePattern(style1, dimensions, expected, failed) {
@@ -205,6 +222,20 @@ function testRightAngledtriangle(failed) {
   rightAngledtriangleStyle([1], '*', failed);
 }
 
+function spacedAlternatingRecStyle(dimensions, expected, failed) {
+  testGeneratePattern('spaced-alternating-rectangle', dimensions, expected, failed);
+}
+
+function testSpacedAlternatingRec(failed) {
+  spacedAlternatingRecStyle([3, 4], '***\n---\n   \n***', failed);
+  spacedAlternatingRecStyle([5, 6], '*****\n-----\n     \n*****\n-----\n     ', failed);
+  spacedAlternatingRecStyle([4, 3], '****\n----\n    ', failed);
+  spacedAlternatingRecStyle([6, 2], '******\n------', failed);
+  spacedAlternatingRecStyle([0, 3], '', failed);
+  spacedAlternatingRecStyle([5, 0], '', failed);
+  spacedAlternatingRecStyle([2, 10], '**\n--\n  \n**\n--\n  \n**\n--\n  \n**', failed);
+}
+
 function testAll() {
   const failed = [];
 
@@ -213,6 +244,7 @@ function testAll() {
   testAlternatingRectangle(failed);
   testTriangle(failed);
   testRightAngledtriangle(failed);
+  testSpacedAlternatingRec(failed);
 
   console.table(failed);
 }
