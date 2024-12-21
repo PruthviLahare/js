@@ -1,4 +1,6 @@
 const SPACE = ' ';
+const STAR = '*';
+const DASH = '-';
 
 const min = function (num1, num2) {
   return num1 < num2;
@@ -34,13 +36,13 @@ const createFilledArray = function (size, fillWith) {
 };
 
 const hollowRow = function (size) {
-  return '*' + SPACE.repeat(size - 2) + '*';
+  return STAR + SPACE.repeat(size - 2) + STAR;
 };
 
 const filledRectangle = function (dimensions) {
   const [columns, rows] = dimensions;
   const rowCounts = createFilledArray(rows, columns);
-  const rectangle = rowCounts.map(getRow('*'));
+  const rectangle = rowCounts.map(getRow(STAR));
 
   return rectangle;
 };
@@ -55,14 +57,14 @@ const hollowRectangle = function (dimensions) {
   const rowCounts = createFilledArray(rows - 2, columns);
   const rectangle = rowCounts.map(hollowRow);
 
-  rectangle.unshift(getRow('*')(columns));
+  rectangle.unshift(getRow(STAR)(columns));
   rectangle.push(rectangle[0]);
 
   return rectangle;
 };
 
 const alternate = function (rowCounts, times, upto) {
-  const symbols = ['*', '-', ' '];
+  const symbols = [STAR, DASH, SPACE];
   const stars = getRow(symbols[0])(times);
   const dash = getRow(symbols[1])(times);
   const space = getRow(symbols[2])(times);
@@ -93,17 +95,13 @@ const triangle = function (dimension) {
   return triangle;
 };
 
-const space = function (times) {
-  return SPACE.repeat(times);
-};
-
 const spaceBefore = function (triangleShape, dimension) {
-  const space1 = range(dimension[0] - 1, -1, -1);
-  const tri = [];
+  const spaceCount = range(dimension[0] - 1, -1, -1);
+  const rows = [];
 
   for (let index = 0; index < triangleShape.length; index++) {
-    const row = space(space1[index]) + triangleShape[index];
-    tri.push(row);
+    const row = getRow(SPACE)(spaceCount[index]) + triangleShape[index];
+    rows.push(row);
   }
   // return function (row) {
   //   for (const element of space1) {
@@ -112,15 +110,13 @@ const spaceBefore = function (triangleShape, dimension) {
 
   // };
 
-  return tri;
+  return rows;
 };
 
 const rightAngledtriangle = function (dimension) {
   const triangleShape = triangle(dimension);
-  const tri = spaceBefore(triangleShape, dimension);
   // const tri = triangleShape.map(spaceBefore(dimension));
-
-  return tri;
+  return spaceBefore(triangleShape, dimension);
 };
 
 const spacedAlternatingRectangle = function (dimensions) {
@@ -139,11 +135,11 @@ const requiredArray = function (size) {
   return upper.concat(lower);
 };
 
-const shape = function (size) {
+const diamondShape = function (size) {
   return function (row) {
     const spaceCount = (size - row) / 2;
 
-    return getRow(SPACE)(spaceCount) + getRow('*')(row);
+    return getRow(SPACE)(spaceCount) + getRow(STAR)(row);
   };
 };
 
@@ -157,36 +153,36 @@ function validOddNumber(number) {
 
 const diamond = function (dimension) {
   if (dimension[0] === 1) {
-    return ['*'];
+    return [STAR];
   }
 
   const size = validOddNumber(dimension[0]);
 
   const rowCounts = requiredArray(size, 2);
-  const moti = rowCounts.map(shape(size));
+  const moti = rowCounts.map(diamondShape(size));
   return moti;
 };
 
-function isRowOrColumnEmpty(dimensions) {
+function areRowOrColumnEmpty(dimensions) {
   return dimensions[0] === 0 || dimensions[1] === 0;
 }
 
 const generatePattern = function (style, dimensions) {
-  if (isRowOrColumnEmpty(dimensions)) {
+  const patterns = {
+    'filled-rectangle': filledRectangle,
+    'hollow-rectangle': hollowRectangle,
+    'alternating-rectangle': alternatingRectangle,
+    'triangle': triangle,
+    'right-aligned-triangle': rightAngledtriangle,
+    'spaced-alternating-rectangle': spacedAlternatingRectangle,
+    'diamond': diamond,
+  };
+
+  if (areRowOrColumnEmpty(dimensions)) {
     return '';
   }
 
   return patterns[style](dimensions).join('\n');
-};
-
-const patterns = {
-  'filled-rectangle': filledRectangle,
-  'hollow-rectangle': hollowRectangle,
-  'alternating-rectangle': alternatingRectangle,
-  'triangle': triangle,
-  'right-aligned-triangle': rightAngledtriangle,
-  'spaced-alternating-rectangle': spacedAlternatingRectangle,
-  'diamond': diamond,
 };
 
 function testGeneratePattern(style1, dimensions, expected, failed) {
