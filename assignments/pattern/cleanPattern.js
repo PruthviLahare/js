@@ -1,3 +1,5 @@
+const SPACE = ' ';
+
 const min = function (num1, num2) {
   return num1 < num2;
 };
@@ -21,10 +23,8 @@ function range(from, to, increment) {
   return arr;
 }
 
-const SPACE = ' ';
-
-const getRow = function (times, char) {
-  return function () {
+const getRow = function (char) {
+  return function (times) {
     return char.repeat(times);
   };
 };
@@ -40,7 +40,7 @@ const hollowRow = function (size) {
 const filledRectangle = function (dimensions) {
   const [columns, rows] = dimensions;
   const rowCounts = createFilledArray(rows, columns);
-  const rectangle = rowCounts.map(getRow(columns, '*'));
+  const rectangle = rowCounts.map(getRow('*'));
 
   return rectangle;
 };
@@ -55,30 +55,41 @@ const hollowRectangle = function (dimensions) {
   const rowCounts = createFilledArray(rows - 2, columns);
   const rectangle = rowCounts.map(hollowRow);
 
-  rectangle.unshift(getRow(columns, '*')());
+  rectangle.unshift(getRow('*')(columns));
   rectangle.push(rectangle[0]);
 
   return rectangle;
 };
 
-const alternate = function (array, times) {
-  const row = function (element) {
-    if (element % 2 === 0) {
-      return getRow(times, '*')();
-    }
+const alternate = function (rowCounts, times, upto) {
+  const symbols = ['*', '-', ' '];
+  const stars = getRow(symbols[0])(times);
+  const dash = getRow(symbols[1])(times);
+  const space = getRow(symbols[2])(times);
+  const alternateRows = [stars, dash, space];
 
-    return getRow(times, '-')();
+  const row = function (element) {
+    return alternateRows[element % upto];
   };
 
-  return array.map(row);
+  return rowCounts.map(row);
 };
 
 const alternatingRectangle = function (dimensions) {
   const [columns, rows] = dimensions;
   const rowCounts = range(0, rows, 1);
 
-  const rectangle = alternate(rowCounts, columns);
+  const rectangle = alternate(rowCounts, columns, 2);
   return rectangle;
+};
+
+const triangle = function (dimension) {
+  const till = dimension[0] + 1;
+
+  const rowCounts = range(1, till, 1);
+
+  const triangle = rowCounts.map(getRow('*'));
+  return triangle;
 };
 
 function isRowOrColumnEmpty(dimensions) {
@@ -97,6 +108,7 @@ const patterns = {
   'filled-rectangle': filledRectangle,
   'hollow-rectangle': hollowRectangle,
   'alternating-rectangle': alternatingRectangle,
+  'triangle': triangle
 };
 
 function testGeneratePattern(style1, dimensions, expected, failed) {
@@ -146,12 +158,24 @@ function testAlternatingRectangle(failed) {
   AlternatingRectangleStyle([5, 4], '*****\n-----\n*****\n-----', failed);
 }
 
+function triangleStyle(dimensions, expected, failed) {
+  testGeneratePattern('triangle', dimensions, expected, failed);
+}
+
+function testTriangle(failed) {
+  triangleStyle([3], '*\n**\n***', failed);
+  triangleStyle([5], '*\n**\n***\n****\n*****', failed);
+  triangleStyle([0], '', failed);
+  triangleStyle([1], '*', failed);
+}
+
 function testAll() {
   const failed = [];
 
   testFilledRectangle(failed);
   testHollowRectangle(failed);
   testAlternatingRectangle(failed);
+  testTriangle(failed);
 
   console.table(failed);
 }
