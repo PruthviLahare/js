@@ -132,6 +132,41 @@ const spacedAlternatingRectangle = function (dimensions) {
   return rectangle;
 };
 
+const requiredArray = function (size) {
+  const upper = range(1, size + 1, 2);
+  const lower = range(size - 2, 0, -2);
+
+  return upper.concat(lower);
+};
+
+const shape = function (size) {
+  return function (row) {
+    const spaceCount = (size - row) / 2;
+
+    return getRow(SPACE)(spaceCount) + getRow('*')(row);
+  };
+};
+
+const isEven = function (num) {
+  return (num & 1) === 0;
+};
+
+function validOddNumber(number) {
+  return isEven(number) ? number - 1 : number;
+}
+
+const diamond = function (dimension) {
+  if (dimension[0] === 1) {
+    return ['*'];
+  }
+
+  const size = validOddNumber(dimension[0]);
+
+  const rowCounts = requiredArray(size, 2);
+  const moti = rowCounts.map(shape(size));
+  return moti;
+};
+
 function isRowOrColumnEmpty(dimensions) {
   return dimensions[0] === 0 || dimensions[1] === 0;
 }
@@ -151,6 +186,7 @@ const patterns = {
   'triangle': triangle,
   'right-aligned-triangle': rightAngledtriangle,
   'spaced-alternating-rectangle': spacedAlternatingRectangle,
+  'diamond': diamond,
 };
 
 function testGeneratePattern(style1, dimensions, expected, failed) {
@@ -236,6 +272,19 @@ function testSpacedAlternatingRec(failed) {
   spacedAlternatingRecStyle([2, 10], '**\n--\n  \n**\n--\n  \n**\n--\n  \n**', failed);
 }
 
+function diamondStyle(dimensions, expected, failed) {
+  testGeneratePattern('diamond', dimensions, expected, failed);
+}
+
+function testDiamond(failed) {
+  diamondStyle([3], ' *\n***\n *', failed);
+  diamondStyle([4], ' *\n***\n *', failed);
+  diamondStyle([0], '', failed);
+  diamondStyle([1], '*', failed);
+  diamondStyle([5], '  *\n ***\n*****\n ***\n  *', failed);
+  diamondStyle([7], '   *\n  ***\n *****\n*******\n *****\n  ***\n   *', failed);
+}
+
 function testAll() {
   const failed = [];
 
@@ -245,6 +294,7 @@ function testAll() {
   testTriangle(failed);
   testRightAngledtriangle(failed);
   testSpacedAlternatingRec(failed);
+  testDiamond(failed);
 
   console.table(failed);
 }
