@@ -1,6 +1,12 @@
-const SPACE = ' ';
-const STAR = '*';
-const DASH = '-';
+const getRow = function (char) {
+  return function (times) {
+    return char.repeat(times);
+  };
+};
+
+const stars = getRow('*');
+const space = getRow(' ');
+const dash = getRow('-');
 
 const min = function (num1, num2) {
   return num1 < num2;
@@ -12,33 +18,27 @@ const max = function (num1, num2) {
 
 function range(from, to, increment) {
   const arr = [];
-  const condition = from > to ? max : min;
+  const condition = from > to ? min : max;
 
-  for (from; condition(from, to); from += increment) {
+  for (from; condition(to, from); from += increment) {
     arr.push(from);
   }
 
   return arr;
 }
 
-const getRow = function (char) {
-  return function (times) {
-    return char.repeat(times);
-  };
-};
-
 const createFilledArray = function (size, fillWith) {
   return Array(size).fill(fillWith);
 };
 
 const hollowRow = function (size) {
-  return STAR + SPACE.repeat(size - 2) + STAR;
+  return stars(1) + space(1).repeat(size - 2) + stars(1);
 };
 
 const filledRectangle = function (dimensions) {
   const [columns, rows] = dimensions;
   const rowCounts = createFilledArray(rows, columns);
-  const rectangle = rowCounts.map(getRow(STAR));
+  const rectangle = rowCounts.map(stars);
 
   return rectangle;
 };
@@ -53,18 +53,14 @@ const hollowRectangle = function (dimensions) {
   const rowCounts = createFilledArray(rows - 2, columns);
   const rectangle = rowCounts.map(hollowRow);
 
-  rectangle.unshift(getRow(STAR)(columns));
+  rectangle.unshift(stars(columns));
   rectangle.push(rectangle[0]);
 
   return rectangle;
 };
 
 const alternate = function (rowCounts, times, upto) {
-  const symbols = [STAR, DASH, SPACE];
-  const stars = getRow(symbols[0])(times);
-  const dash = getRow(symbols[1])(times);
-  const space = getRow(symbols[2])(times);
-  const alternateRows = [stars, dash, space];
+  const alternateRows = [stars(times), dash(times), space(times)];
 
   const row = function (element) {
     return alternateRows[element % upto];
@@ -83,10 +79,11 @@ const alternatingRectangle = function (dimensions) {
 };
 
 const triangle = function (dimension) {
+  const rowStars = stars;
   const size = dimension[0] + 1;
 
   const rowCounts = range(1, size, 1);
-  const triangle = rowCounts.map(getRow('*'));
+  const triangle = rowCounts.map(rowStars);
 
   return triangle;
 };
@@ -96,7 +93,7 @@ const spaceBefore = function (triangleShape, dimension) {
   const rows = [];
 
   for (let index = 0; index < triangleShape.length; index++) {
-    const row = getRow(SPACE)(spaceCount[index]) + triangleShape[index];
+    const row = space(spaceCount[index]) + triangleShape[index];
     rows.push(row);
   }
   // return function (row) {
@@ -135,7 +132,7 @@ const diamondShape = function (size) {
   return function (row) {
     const spaceCount = (size - row) / 2;
 
-    return getRow(SPACE)(spaceCount) + getRow(STAR)(row);
+    return space(spaceCount) + stars(row);
   };
 };
 
@@ -149,7 +146,7 @@ function adjustToOdd(number) {
 
 const diamond = function (dimension) {
   if (dimension[0] <= 2) {
-    return [STAR];
+    return [stars(1)];
   }
 
   const size = adjustToOdd(dimension[0]);
