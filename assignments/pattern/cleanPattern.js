@@ -35,19 +35,16 @@ const hollowRow = function (size) {
   return stars(1) + space(1).repeat(size - 2) + stars(1);
 };
 
-const filledRectangle = function (dimensions) {
-  const [columns, rows] = dimensions;
+const filledRectangle = function ([columns, rows]) {
   const rowCounts = createFilledArray(rows, columns);
   const rectangle = rowCounts.map(stars);
 
   return rectangle;
 };
 
-const hollowRectangle = function (dimensions) {
-  const [columns, rows] = dimensions;
-
+const hollowRectangle = function ([columns, rows]) {
   if (rows <= 2) {
-    return filledRectangle(dimensions);
+    return filledRectangle([columns, rows]);
   }
 
   const rowCounts = createFilledArray(rows - 2, columns);
@@ -69,27 +66,24 @@ const alternate = function (rowCounts, times, upto) {
   return rowCounts.map(row);
 };
 
-const alternatingRectangle = function (dimensions) {
-  const [columns, rows] = dimensions;
-
+const alternatingRectangle = function ([columns, rows]) {
   const rowCounts = range(0, rows, 1);
   const rectangle = alternate(rowCounts, columns, 2);
 
   return rectangle;
 };
 
-const triangle = function (dimension) {
+const triangle = function ([size]) {
   const rowStars = stars;
-  const size = dimension[0] + 1;
 
-  const rowCounts = range(1, size, 1);
+  const rowCounts = range(1, size + 1, 1);
   const triangle = rowCounts.map(rowStars);
 
   return triangle;
 };
 
-const spaceBefore = function (triangleShape, dimension) {
-  const spaceCount = range(dimension[0] - 1, -1, -1);
+const spaceBefore = function (triangleShape, size) {
+  const spaceCount = range(size - 1, -1, -1);
   const rows = [];
 
   for (let index = 0; index < triangleShape.length; index++) {
@@ -106,15 +100,13 @@ const spaceBefore = function (triangleShape, dimension) {
   return rows;
 };
 
-const rightAngledtriangle = function (dimension) {
-  const triangleShape = triangle(dimension);
+const rightAngledtriangle = function (size) {
+  const triangleShape = triangle(size);
   // const tri = triangleShape.map(spaceBefore(dimension));
-  return spaceBefore(triangleShape, dimension);
+  return spaceBefore(triangleShape, size);
 };
 
-const spacedAlternatingRectangle = function (dimensions) {
-  const [columns, rows] = dimensions;
-
+const spacedAlternatingRectangle = function ([columns, rows]) {
   const rowCounts = range(0, rows, 1);
   const rectangle = alternate(rowCounts, columns, 3);
 
