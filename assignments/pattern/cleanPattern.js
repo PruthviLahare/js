@@ -11,10 +11,6 @@ const max = function (num1, num2) {
 };
 
 function range(from, to, increment) {
-  if (increment === 0) {
-    return [];
-  }
-
   const arr = [];
   const condition = from > to ? max : min;
 
@@ -128,7 +124,7 @@ const spacedAlternatingRectangle = function (dimensions) {
   return rectangle;
 };
 
-const requiredArray = function (size) {
+const getBaseNumbers = function (size) {
   const upper = range(1, size + 1, 2);
   const lower = range(size - 2, 0, -2);
 
@@ -147,20 +143,19 @@ const isEven = function (num) {
   return (num & 1) === 0;
 };
 
-function validOddNumber(number) {
+function adjustToOdd(number) {
   return isEven(number) ? number - 1 : number;
 }
 
 const diamond = function (dimension) {
-  if (dimension[0] === 1) {
+  if (dimension[0] <= 2) {
     return [STAR];
   }
 
-  const size = validOddNumber(dimension[0]);
+  const size = adjustToOdd(dimension[0]);
 
-  const rowCounts = requiredArray(size, 2);
-  const moti = rowCounts.map(diamondShape(size));
-  return moti;
+  const baseNumber = getBaseNumbers(size, 2);
+  return baseNumber.map(diamondShape(size));
 };
 
 function areRowOrColumnEmpty(dimensions) {
@@ -168,6 +163,10 @@ function areRowOrColumnEmpty(dimensions) {
 }
 
 const generatePattern = function (style, dimensions) {
+  if (areRowOrColumnEmpty(dimensions)) {
+    return '';
+  }
+
   const patterns = {
     'filled-rectangle': filledRectangle,
     'hollow-rectangle': hollowRectangle,
@@ -177,10 +176,6 @@ const generatePattern = function (style, dimensions) {
     'spaced-alternating-rectangle': spacedAlternatingRectangle,
     'diamond': diamond,
   };
-
-  if (areRowOrColumnEmpty(dimensions)) {
-    return '';
-  }
 
   return patterns[style](dimensions).join('\n');
 };
