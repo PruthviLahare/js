@@ -4,17 +4,13 @@ const getRow = function (char) {
   };
 };
 
-const stars = getRow('*');
-const space = getRow(' ');
-const dash = getRow('-');
+const stars = getRow("*");
+const space = getRow(" ");
+const dash = getRow("-");
 
-const isSmall = function (num1, num2) {
-  return num1 < num2;
-};
+const isSmall = (num1, num2) => num1 < num2;
 
-const isGreater = function (num1, num2) {
-  return num1 > num2;
-};
+const isGreater = (num1, num2) => num1 > num2;
 
 function range(from, to, increment) {
   const numbers = [];
@@ -67,7 +63,7 @@ const triangle = function ([size]) {
 };
 
 const alignRight = function (triangleShape, size) {
-  return triangleShape.map((row) => row.padStart(size, ' '));
+  return triangleShape.map((row) => row.padStart(size, " "));
 };
 
 const rightAngledtriangle = function (size) {
@@ -97,13 +93,9 @@ const diamondShape = function (size) {
   };
 };
 
-const isEven = function (num) {
-  return (num & 1) === 0;
-};
+const isEven = (num) => (num & 1) === 0;
 
-function adjustToOdd(number) {
-  return isEven(number) ? number - 1 : number;
-}
+const adjustToOdd = (number) => (isEven(number) ? number - 1 : number);
 
 const diamond = function ([size]) {
   if (size <= 2) {
@@ -121,20 +113,20 @@ function areRowOrColumnEmpty([columns, rows]) {
 
 const generatePattern = function (style, dimensions) {
   if (areRowOrColumnEmpty(dimensions)) {
-    return '';
+    return "";
   }
 
   const patterns = {
-    'filled-rectangle': filledRectangle,
-    'hollow-rectangle': hollowRectangle,
-    'alternating-rectangle': alternatingRectangle,
-    'triangle': triangle,
-    'right-aligned-triangle': rightAngledtriangle,
-    'spaced-alternating-rectangle': spacedAlternatingRectangle,
-    'diamond': diamond,
+    "filled-rectangle": filledRectangle,
+    "hollow-rectangle": hollowRectangle,
+    "alternating-rectangle": alternatingRectangle,
+    triangle: triangle,
+    "right-aligned-triangle": rightAngledtriangle,
+    "spaced-alternating-rectangle": spacedAlternatingRectangle,
+    diamond: diamond,
   };
 
-  return patterns[style](dimensions).join('\n');
+  return patterns[style](dimensions).join("\n");
 };
 
 function testGeneratePattern(style1, dimensions, expected, failed) {
@@ -146,92 +138,109 @@ function testGeneratePattern(style1, dimensions, expected, failed) {
 }
 
 function filledRectangleStyle(dimensions, expected, failed) {
-  testGeneratePattern('filled-rectangle', dimensions, expected, failed);
+  testGeneratePattern("filled-rectangle", dimensions, expected, failed);
 }
 
 function testFilledRectangle(failed) {
-  filledRectangleStyle([0, 0], '', failed);
-  filledRectangleStyle([7, 0], '', failed);
-  filledRectangleStyle([0, 5], '', failed);
-  filledRectangleStyle([5, 3], '*****\n*****\n*****', failed);
-  filledRectangleStyle([2, 4], '**\n**\n**\n**', failed);
-  filledRectangleStyle([5, 1], '*****', failed);
+  filledRectangleStyle([0, 0], "", failed);
+  filledRectangleStyle([7, 0], "", failed);
+  filledRectangleStyle([0, 5], "", failed);
+  filledRectangleStyle([5, 3], "*****\n*****\n*****", failed);
+  filledRectangleStyle([2, 4], "**\n**\n**\n**", failed);
+  filledRectangleStyle([5, 1], "*****", failed);
 }
 
 function hollowRectangleStyle(dimensions, expected, failed) {
-  testGeneratePattern('hollow-rectangle', dimensions, expected, failed);
+  testGeneratePattern("hollow-rectangle", dimensions, expected, failed);
 }
 
 function testHollowRectangle(failed) {
-  hollowRectangleStyle([5, 1], '*****', failed);
-  hollowRectangleStyle([1, 2], '*\n*', failed);
-  hollowRectangleStyle([2, 2], '**\n**', failed);
-  hollowRectangleStyle([6, 2], '******\n******', failed);
-  hollowRectangleStyle([4, 3], '****\n*  *\n****', failed);
-  hollowRectangleStyle([5, 4], '*****\n*   *\n*   *\n*****', failed);
-  hollowRectangleStyle([5, 0], '', failed);
-  hollowRectangleStyle([0, 0], '', failed);
+  hollowRectangleStyle([5, 1], "*****", failed);
+  hollowRectangleStyle([1, 2], "*\n*", failed);
+  hollowRectangleStyle([2, 2], "**\n**", failed);
+  hollowRectangleStyle([6, 2], "******\n******", failed);
+  hollowRectangleStyle([4, 3], "****\n*  *\n****", failed);
+  hollowRectangleStyle([5, 4], "*****\n*   *\n*   *\n*****", failed);
+  hollowRectangleStyle([5, 0], "", failed);
+  hollowRectangleStyle([0, 0], "", failed);
 }
 
 function AlternatingRectangleStyle(dimensions, expected, failed) {
-  testGeneratePattern('alternating-rectangle', dimensions, expected, failed);
+  testGeneratePattern("alternating-rectangle", dimensions, expected, failed);
 }
 
 function testAlternatingRectangle(failed) {
-  AlternatingRectangleStyle([0, 3], '', failed);
-  AlternatingRectangleStyle([3, 3], '***\n---\n***', failed);
-  AlternatingRectangleStyle([4, 1], '****', failed);
-  AlternatingRectangleStyle([6, 2], '******\n------', failed);
-  AlternatingRectangleStyle([5, 4], '*****\n-----\n*****\n-----', failed);
+  AlternatingRectangleStyle([0, 3], "", failed);
+  AlternatingRectangleStyle([3, 3], "***\n---\n***", failed);
+  AlternatingRectangleStyle([4, 1], "****", failed);
+  AlternatingRectangleStyle([6, 2], "******\n------", failed);
+  AlternatingRectangleStyle([5, 4], "*****\n-----\n*****\n-----", failed);
 }
 
 function triangleStyle(dimensions, expected, failed) {
-  testGeneratePattern('triangle', dimensions, expected, failed);
+  testGeneratePattern("triangle", dimensions, expected, failed);
 }
 
 function testTriangle(failed) {
-  triangleStyle([3], '*\n**\n***', failed);
-  triangleStyle([5], '*\n**\n***\n****\n*****', failed);
-  triangleStyle([0], '', failed);
-  triangleStyle([1], '*', failed);
+  triangleStyle([3], "*\n**\n***", failed);
+  triangleStyle([5], "*\n**\n***\n****\n*****", failed);
+  triangleStyle([0], "", failed);
+  triangleStyle([1], "*", failed);
 }
 
 function rightAngledtriangleStyle(dimensions, expected, failed) {
-  testGeneratePattern('right-aligned-triangle', dimensions, expected, failed);
+  testGeneratePattern("right-aligned-triangle", dimensions, expected, failed);
 }
 
 function testRightAngledtriangle(failed) {
-  rightAngledtriangleStyle([3], '  *\n **\n***', failed);
-  rightAngledtriangleStyle([5], '    *\n   **\n  ***\n ****\n*****', failed);
-  rightAngledtriangleStyle([0], '', failed);
-  rightAngledtriangleStyle([1], '*', failed);
+  rightAngledtriangleStyle([3], "  *\n **\n***", failed);
+  rightAngledtriangleStyle([5], "    *\n   **\n  ***\n ****\n*****", failed);
+  rightAngledtriangleStyle([0], "", failed);
+  rightAngledtriangleStyle([1], "*", failed);
 }
 
 function spacedAlternatingRecStyle(dimensions, expected, failed) {
-  testGeneratePattern('spaced-alternating-rectangle', dimensions, expected, failed);
+  testGeneratePattern(
+    "spaced-alternating-rectangle",
+    dimensions,
+    expected,
+    failed
+  );
 }
 
 function testSpacedAlternatingRec(failed) {
-  spacedAlternatingRecStyle([3, 4], '***\n---\n   \n***', failed);
-  spacedAlternatingRecStyle([5, 6], '*****\n-----\n     \n*****\n-----\n     ', failed);
-  spacedAlternatingRecStyle([4, 3], '****\n----\n    ', failed);
-  spacedAlternatingRecStyle([6, 2], '******\n------', failed);
-  spacedAlternatingRecStyle([0, 3], '', failed);
-  spacedAlternatingRecStyle([5, 0], '', failed);
-  spacedAlternatingRecStyle([2, 10], '**\n--\n  \n**\n--\n  \n**\n--\n  \n**', failed);
+  spacedAlternatingRecStyle([3, 4], "***\n---\n   \n***", failed);
+  spacedAlternatingRecStyle(
+    [5, 6],
+    "*****\n-----\n     \n*****\n-----\n     ",
+    failed
+  );
+  spacedAlternatingRecStyle([4, 3], "****\n----\n    ", failed);
+  spacedAlternatingRecStyle([6, 2], "******\n------", failed);
+  spacedAlternatingRecStyle([0, 3], "", failed);
+  spacedAlternatingRecStyle([5, 0], "", failed);
+  spacedAlternatingRecStyle(
+    [2, 10],
+    "**\n--\n  \n**\n--\n  \n**\n--\n  \n**",
+    failed
+  );
 }
 
 function diamondStyle(dimensions, expected, failed) {
-  testGeneratePattern('diamond', dimensions, expected, failed);
+  testGeneratePattern("diamond", dimensions, expected, failed);
 }
 
 function testDiamond(failed) {
-  diamondStyle([3], ' *\n***\n *', failed);
-  diamondStyle([4], ' *\n***\n *', failed);
-  diamondStyle([0], '', failed);
-  diamondStyle([1], '*', failed);
-  diamondStyle([5], '  *\n ***\n*****\n ***\n  *', failed);
-  diamondStyle([7], '   *\n  ***\n *****\n*******\n *****\n  ***\n   *', failed);
+  diamondStyle([3], " *\n***\n *", failed);
+  diamondStyle([4], " *\n***\n *", failed);
+  diamondStyle([0], "", failed);
+  diamondStyle([1], "*", failed);
+  diamondStyle([5], "  *\n ***\n*****\n ***\n  *", failed);
+  diamondStyle(
+    [7],
+    "   *\n  ***\n *****\n*******\n *****\n  ***\n   *",
+    failed
+  );
 }
 
 function testAll() {
