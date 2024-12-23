@@ -8,23 +8,23 @@ const stars = getRow('*');
 const space = getRow(' ');
 const dash = getRow('-');
 
-const min = function (num1, num2) {
+const isSmall = function (num1, num2) {
   return num1 < num2;
 };
 
-const max = function (num1, num2) {
+const isGreater = function (num1, num2) {
   return num1 > num2;
 };
 
 function range(from, to, increment) {
-  const arr = [];
-  const condition = from > to ? min : max;
+  const numbers = [];
+  const condition = from > to ? isSmall : isGreater;
 
-  for (from; condition(to, from); from += increment) {
-    arr.push(from);
+  for (let number = from; condition(to, number); number += increment) {
+    numbers.push(number);
   }
 
-  return arr;
+  return numbers;
 }
 
 const createFilledArray = function (size, fillWith) {
@@ -32,14 +32,11 @@ const createFilledArray = function (size, fillWith) {
 };
 
 const hollowRow = function (size) {
-  return stars(1) + space(1).repeat(size - 2) + stars(1);
+  return stars(1) + space(size - 2) + stars(1);
 };
 
 const filledRectangle = function ([columns, rows]) {
-  const rowCounts = createFilledArray(rows, columns);
-  const rectangle = rowCounts.map(stars);
-
-  return rectangle;
+  return createFilledArray(rows, columns).map(stars);
 };
 
 const hollowRectangle = function ([columns, rows]) {
@@ -50,74 +47,46 @@ const hollowRectangle = function ([columns, rows]) {
   const rowCounts = createFilledArray(rows - 2, columns);
   const rectangle = rowCounts.map(hollowRow);
 
-  rectangle.unshift(stars(columns));
-  rectangle.push(rectangle[0]);
-
-  return rectangle;
+  return [stars(columns), ...rectangle, stars(columns)];
 };
 
 const alternate = function (rowCounts, times, upto) {
   const alternateRows = [stars(times), dash(times), space(times)];
 
-  const row = function (element) {
-    return alternateRows[element % upto];
-  };
-
-  return rowCounts.map(row);
+  return rowCounts.map((element) => alternateRows[element % upto]);
 };
 
 const alternatingRectangle = function ([columns, rows]) {
   const rowCounts = range(0, rows, 1);
-  const rectangle = alternate(rowCounts, columns, 2);
 
-  return rectangle;
+  return alternate(rowCounts, columns, 2);
 };
 
 const triangle = function ([size]) {
-  const rowStars = stars;
-
-  const rowCounts = range(1, size + 1, 1);
-  const triangle = rowCounts.map(rowStars);
-
-  return triangle;
+  return range(1, size + 1, 1).map(stars);
 };
 
-const spaceBefore = function (triangleShape, size) {
-  const spaceCount = range(size - 1, -1, -1);
-  const rows = [];
-
-  for (let index = 0; index < triangleShape.length; index++) {
-    const row = space(spaceCount[index]) + triangleShape[index];
-    rows.push(row);
-  }
-  // return function (row) {
-  //   for (const element of space1) {
-  //     return space(element) + row;
-  //   }
-
-  // };
-
-  return rows;
+const alignRight = function (triangleShape, size) {
+  return triangleShape.map((row) => row.padStart(size, ' '));
 };
 
 const rightAngledtriangle = function (size) {
   const triangleShape = triangle(size);
-  // const tri = triangleShape.map(spaceBefore(dimension));
-  return spaceBefore(triangleShape, size);
+
+  return alignRight(triangleShape, size);
 };
 
 const spacedAlternatingRectangle = function ([columns, rows]) {
   const rowCounts = range(0, rows, 1);
-  const rectangle = alternate(rowCounts, columns, 3);
 
-  return rectangle;
+  return alternate(rowCounts, columns, 3);
 };
 
-const getBaseNumbers = function (size) {
+const getLayout = function (size) {
   const upper = range(1, size + 1, 2);
   const lower = range(size - 2, 0, -2);
 
-  return upper.concat(lower);
+  return [...upper, ...lower];
 };
 
 const diamondShape = function (size) {
@@ -136,19 +105,18 @@ function adjustToOdd(number) {
   return isEven(number) ? number - 1 : number;
 }
 
-const diamond = function (dimension) {
-  if (dimension[0] <= 2) {
+const diamond = function ([size]) {
+  if (size <= 2) {
     return [stars(1)];
   }
 
-  const size = adjustToOdd(dimension[0]);
+  const odd = adjustToOdd(size);
 
-  const baseNumber = getBaseNumbers(size, 2);
-  return baseNumber.map(diamondShape(size));
+  return getLayout(odd, 2).map(diamondShape(odd));
 };
 
-function areRowOrColumnEmpty(dimensions) {
-  return dimensions[0] === 0 || dimensions[1] === 0;
+function areRowOrColumnEmpty([columns, rows]) {
+  return columns === 0 || rows === 0;
 }
 
 const generatePattern = function (style, dimensions) {
@@ -171,6 +139,7 @@ const generatePattern = function (style, dimensions) {
 
 function testGeneratePattern(style1, dimensions, expected, failed) {
   const actual = generatePattern(style1, dimensions);
+
   if (actual !== expected) {
     failed.push([style1, dimensions, actual, expected]);
   }
