@@ -1,18 +1,18 @@
-const getRow = function (char) {
-  return function (times) {
-    return char.repeat(times);
-  };
-};
+// const getRow = function (char) {
+//   return function (times) {
+//     return char.repeat(times);
+//   };
+// };
 
-const stars = getRow("*");
-const space = getRow(" ");
-const dash = getRow("-");
+const getRow = (char) => (times) => char.repeat(times);
+
+const [stars, space, dash] = ["*", " ", "-"].map(getRow);
 
 const isSmall = (num1, num2) => num1 < num2;
 
 const isGreater = (num1, num2) => num1 > num2;
 
-function range(from, to, increment) {
+const range = function (from, to, increment) {
   const numbers = [];
   const condition = from > to ? isSmall : isGreater;
 
@@ -21,7 +21,7 @@ function range(from, to, increment) {
   }
 
   return numbers;
-}
+};
 
 const createFilledArray = function (size, fillWith) {
   return Array(size).fill(fillWith);
@@ -111,8 +111,10 @@ function areRowOrColumnEmpty([columns, rows]) {
   return columns === 0 || rows === 0;
 }
 
+const isZero = (x) => x === 0;
+
 const generatePattern = function (style, dimensions) {
-  if (areRowOrColumnEmpty(dimensions)) {
+  if (dimensions.some(isZero)) {
     return "";
   }
 

@@ -28,13 +28,14 @@ function expectationSegment(actual, expected) {
 }
 
 function assembleMessage(array1, array2, expected, actual) {
-  const message = 'are given array same ❓ "' + array1 + '" 👉 "' + array2 + '"';
+  const message =
+    'are given array same ❓ "' + array1 + '" 👉 "' + array2 + '"';
 
   return message + "\n" + expectationSegment(actual, expected) + "\n";
 }
 
 function getMark(actual, expected) {
-  return expected === actual ? '✅' : '❌';
+  return expected === actual ? "✅" : "❌";
 }
 
 function testAreEqual(array1, array2, expected) {
@@ -50,8 +51,8 @@ function testAllAreEqual() {
   testAreEqual([1, 2, 3], [1, 3, 2], false);
   testAreEqual([], [], true);
   testAreEqual([1, 1, 1], [1, 1, 1], true);
-  testAreEqual([[1]], [[1]], true);
-  testAreEqual([[1], [1, 2]], [[1], [1, 2]], true); 
+  testAreEqual([[1]], [[1]], true); // getting wrong
+  testAreEqual([[1], [1, 2]], [[1], [1, 2]], true); // getting wrong
 }
 
 testAllAreEqual();
